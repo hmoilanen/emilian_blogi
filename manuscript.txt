@@ -50,3 +50,4 @@ VAIHE 3:
 -lisää prototype: $api
 -rakenna blogin kommentointi
 -hae blogin kommentit kun se aktivoidaan
+-
