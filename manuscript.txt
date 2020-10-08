@@ -1,0 +1,52 @@
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+sivun sisältö:
+
+-etusivu, jossa:
+	-uusin blogi (hae vain tietty blogi, jos ei vielä haettu storeen)
+	-uuden blogin luonti
+
+-blogit-sivu, jossa:
+	-kaikki blogit (hae kaikki blogit, jos ei vielä haettu storeen)
+
+-blogi-sivu, jossa:
+	-ko. blogi (hae ko. blogi, jos ei vielä löydy storesta)
+	-ko. blogin kommentit
+	-blogin hallinta (editointi, tallennus, poisto)
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+toiminnallisuus:
+
+-kun blogi valitaan, se avautuu / aktivoituu
+	-kun aktivoitu:
+		-näkyy kommentit
+		-voi kommentoida
+-blogin kirjoittaminen
+	-sallittu ainoastaan loganneelle käyttäjälle (työkalut ei muuten näkyvissä)
+
+-vaihtoehtoiset toiminnot:
+	-mahdollisuus ilmoittaa sähköposti, johon tulee maili kun uusi blogi on julkaistu
+
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // 
+työvaiheet:
+
+VAIHE 1:
+--OK -rakenna blogin kirjoittaminen
+--OK -tallenna blogi firestoreen
+--OK -hae kaikki blogit
+--OK -hae tietty blogi (?)
+
+VAIHE 2:
+--OK -tee erillinen blogiItem-komponentti
+--OK -rakenna blogin deletointi (?)
+--OK	-rakenna tähän myös varmennus
+--OK -tee erillinen API-file, jossa kaikki metodit
+
+VAIHE 3:
+-rakenna vuex-jutut ja liitä osaksi systeemiä
+--OK	-tallenna blogit ensin storeen josta blogit luetaan
+--OK	-blogin lisääminen vaikuttaa sekä storeen että firebaseen
+	-blogin deletoiminen vaikuttaa sekä storeen että firebaseen
+	-blogin päivittäminen vaikuttaa sekä storeen että firebaseen
+-lisää prototype: $api
+-rakenna blogin kommentointi
+-hae blogin kommentit kun se aktivoidaan
