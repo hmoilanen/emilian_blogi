@@ -7,6 +7,7 @@
 		<br>
 
 		<!-- Latest blog -->
+		TEEE TÄSTÄ
 		<template v-if="latestBlog">
 			<div>
 				<h2>{{ latestBlog.title }}</h2>
@@ -14,6 +15,8 @@
 			</div>
 		</template>
 		<div v-else>LOADING...</div>
+
+		<div>{{ nne }}</div>
   </div>
 </template>
 
@@ -39,9 +42,20 @@ export default {
 			getLatestBlog()
 		}
 		//this.getLatestBlog()
+
+		const opj2 = {
+			a: 7,
+			b: () => {
+				console.log(this.a)
+			}
+		}
 	},
 
 	computed: {
+		nne() {
+			return this.$store.getters['GET_ORDERED_BLOGS']
+		},
+
 		latestBlog() {
 			const latestBlog = this.$store.state.latestBlog
 

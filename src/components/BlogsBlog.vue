@@ -18,7 +18,7 @@
 
 <script>
 import db from '@/firebase/init'
-import { deleteBlog, kekkone } from '@/firebase/api'
+import { deleteBlog } from '@/firebase/api'
 
 
 export default {
@@ -51,29 +51,11 @@ export default {
 
 			// Delete blog if confirmed
 			if (title === titleConfirm) {
-				/* db.collection('blogs').doc(this.blog.id).delete()
-					.then(() => {
-						console.log('Document successfully deleted!')
-						//this.deleteConfirmed = true
-						this.deleting = false
-					}).catch(error => {
-						console.error('Error deleting blog: ', error)
-					}) */
-				/* try {
-					return await deleteBlog('1')
-					console.log('hhä');
-				} catch (error) {
-					console.error(error)
-					console.error('Error deleting blog 2:', error)
-				} */
 				try {
-					await deleteBlog('joku')
-					//return await kekkone()
-					console.log('kun hommat hoidettu2');
-				} catch (e) {
-					console.error('catched error', e)
-				} finally {
-					console.log('LOPULTAKI');
+					await deleteBlog(this.blog.id)
+
+				} catch (error) {
+					console.error('Error deleting blog:', error)
 				}
 			} else {
 				console.log('Typed title doesn\'t match with the title')

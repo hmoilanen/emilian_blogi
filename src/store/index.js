@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { dynamicSort } from '@/utils/arrange'
 
 Vue.use(Vuex)
 
@@ -11,11 +12,25 @@ export default new Vuex.Store({
 		allBlogsStored: false,
 		latestBlog: null
 	},
+
+	getters: {
+		GET_ORDERED_BLOGS: state => {
+			let orderedBlogs = []
+			let order = 'desc'
+			
+			for (const blog in state.blogs) {
+				orderedBlogs.push(state.blogs[blog])
+			}
+
+			return orderedBlogs.slice().sort(dynamicSort('created', order))
+		}
+	},
 	
   mutations: {
 		STORE_BLOGS: (state, blogs) => {
 			// Store blogs as a hash map
-			for (let i = 0; i < blogs.length; i++) {
+			// Note: pass blogs always as an array!
+			for (let i = 0; i < blogs.length; i++) {	
 				Vue.set(state.blogs, blogs[i].id, blogs[i])
 			}
 		},
@@ -27,6 +42,10 @@ export default new Vuex.Store({
 			if (!state.blogs[blog.id]) {
 				Vue.set(state.blogs, blog.id, blog)
 			}
+		},
+
+		DELETE_BLOG: (state, blogId) => {
+			Vue.delete(state.blogs, blogId)
 		},
 
 		ALL_BLOGS_STORED: (state, payload) => {
@@ -47,9 +66,13 @@ export default new Vuex.Store({
 		STORE_LATEST_BLOG: ({ commit }, blog) => {
 			commit('STORE_LATEST_BLOG', blog)
 		},
+
+		DELETE_BLOG: ({ commit }, blogId) => {
+			commit('DELETE_BLOG', blogId)
+		},
 		
 		ALL_BLOGS_STORED: ({ commit }, payload) => {
 			commit('ALL_BLOGS_STORED', payload)
-		}
+		},
 	}
 })

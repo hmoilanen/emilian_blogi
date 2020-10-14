@@ -4,7 +4,9 @@ import store from '@/store'
 const blogsRef = db.collection('blogs')
 
 const getBlog = blogId => {
-	// Get single blog from firebase
+	// Get single blog from firebase if it isn't stored yet
+	if (store.state.blogs[blogId]) return
+
 	blogsRef.doc(blogId).get()
 		.then(doc => {
 			if (doc.exists) {
@@ -19,7 +21,7 @@ const getBlog = blogId => {
 		.catch(error => {
 			// This can be catched in try / catch
 			throw new Error(error)
-		})	
+		})
 }
 
 const getAllBlogs = () => {
@@ -47,9 +49,10 @@ const getAllBlogs = () => {
 }
 
 const getLatestBlog = () => {
+	// HUOM!... MUUTA TÄTÄ NIIN ETTÄ EI VÄLTTÄMÄTTÄ TARVITSE AINA TEHDÄ HAKUA...
+	// ...ESIM JOS UUSIN BLOGI LÖYTYY JO KANNASTA
 	blogsRef.orderBy('created', 'desc').limit(1).get()
 		.then(querySnapshot => {
-			//store.dispatch('STORE_LATEST_BLOG', querySnapshot)
 			querySnapshot.forEach(doc => {
 				const blog = { ...doc.data(), id: doc.id }	
 				store.dispatch('STORE_LATEST_BLOG', blog)
@@ -73,19 +76,11 @@ const saveBlog = blog => {
 		})
 }
 
-
-// käytä deleteBlog funktionta ja popista kannasta blogi
-// jos ei onnistu, palauta errori
-// jos onnistuu, poista sen jälkeen blogi myös storesta
-	// käytä tähän storen actionia deleteBlogFromStore(id)
-
-const deleteBlog = (blogId) => {
-//const deleteBlog = blogId => {
-	blogsRef.doc(blogId).delete()
+const editBlog = (blog, blogId) => {
+	blogsRef.doc(blogId).set(blog)
 		.then(() => {
-			console.log('kun hommat hoidettu');
-			// käytä tässä storen actionia deleteBlog()
-			//store.state
+			const blogForStore = { ...blog, id: blogId }
+			store.dispatch('STORE_BLOGS', [blogForStore])
 		})
 		.catch(error => {
 			// This can be catched in try / catch
@@ -93,17 +88,18 @@ const deleteBlog = (blogId) => {
 		})
 }
 
-const kekkone = async () => {
-	const venttaus = await setTimeout(() => {
-		console.log('sekka meni');
-		//throw await venttaus
-	}, 1000);
-	throw venttaus
-	//throw new Error('this is phukking big error!!!')
-	//throw 'feikkierrori'
-	/* setTimeout(() => {
-		console.log('ventattu');
-	}, 1000); */
+const deleteBlog = (blogId) => {
+//const deleteBlog = blogId => {
+	blogsRef.doc(blogId).delete()
+		.then(() => {
+			console.log('kun hommat hoidettu');
+			// käytä tässä storen actionia deleteBlog()
+			store.dispatch('DELETE_BLOG', blogId)
+		})
+		.catch(error => {
+			// This can be catched in try / catch
+			throw new Error(error)
+		})
 }
 
 export {
@@ -111,6 +107,6 @@ export {
 	getAllBlogs,
 	getLatestBlog,
 	saveBlog,
-	deleteBlog,
-	kekkone
+	editBlog,
+	deleteBlog
 }

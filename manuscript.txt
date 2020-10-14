@@ -45,9 +45,14 @@ VAIHE 3:
 -rakenna vuex-jutut ja liitä osaksi systeemiä
 --OK	-tallenna blogit ensin storeen josta blogit luetaan
 --OK	-blogin lisääminen vaikuttaa sekä storeen että firebaseen
-	-blogin deletoiminen vaikuttaa sekä storeen että firebaseen
-	-blogin päivittäminen vaikuttaa sekä storeen että firebaseen
+--OK	-blogin deletoiminen vaikuttaa sekä storeen että firebaseen
+--OK	-blogin päivittäminen vaikuttaa sekä storeen että firebaseen
+
+VAIHE 4:
 -lisää prototype: $api
--rakenna blogin kommentointi
--hae blogin kommentit kun se aktivoidaan
--
+-rakenna blogin kommentointi (tallenna kommentit omaan collectioniinsa)
+-hae blogin kommentit (vasta) kun se aktivoidaan
+
+
+MUUT:
+-blogin etsiminen / find
