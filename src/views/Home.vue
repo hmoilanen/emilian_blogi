@@ -2,7 +2,6 @@
   <div class="view--home">
 		this is front page
 		<router-link to="/blogs">to blogs</router-link>
-		<router-link to="/blog">to blog</router-link>
 		<Add-Blog/>
 		<br>
 
@@ -15,8 +14,6 @@
 			</div>
 		</template>
 		<div v-else>LOADING...</div>
-
-		<div>{{ nne }}</div>
   </div>
 </template>
 
@@ -52,10 +49,6 @@ export default {
 	},
 
 	computed: {
-		nne() {
-			return this.$store.getters['GET_ORDERED_BLOGS']
-		},
-
 		latestBlog() {
 			const latestBlog = this.$store.state.latestBlog
 
