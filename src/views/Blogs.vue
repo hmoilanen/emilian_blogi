@@ -36,7 +36,7 @@ export default {
 			const blogs = this.$store.state.blogs
 
 			if (blogs && Object.keys(blogs).length > 0) {
-				return this.$store.getters['GET_ORDERED_BLOGS']
+				return this.$store.getters['GET_ORDERED_BLOGS']()
 			} else return null
 		}
 	}

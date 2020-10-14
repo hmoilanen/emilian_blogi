@@ -9,7 +9,8 @@ export const dynamicSort = (key, order = 'asc') => {
     const variableA = (typeof a[key] === 'string') ? a[key].toUpperCase() : a[key]
     const variableB = (typeof b[key] === 'string') ? b[key].toUpperCase() : b[key]
 
-    let comparison = 0
+		let comparison = 0
+
     if (variableA > variableB) {
       comparison = 1
     } else if (variableA < variableB) {

@@ -14,9 +14,8 @@ export default new Vuex.Store({
 	},
 
 	getters: {
-		GET_ORDERED_BLOGS: state => {
+		GET_ORDERED_BLOGS: state => (order = 'desc') => {
 			let orderedBlogs = []
-			let order = 'desc'
 			
 			for (const blog in state.blogs) {
 				orderedBlogs.push(state.blogs[blog])
@@ -67,7 +66,15 @@ export default new Vuex.Store({
 			commit('STORE_LATEST_BLOG', blog)
 		},
 
-		DELETE_BLOG: ({ commit }, blogId) => {
+		DELETE_BLOG: ({ commit, getters }, blogId) => {
+			const allBlogsInOrder = getters['GET_ORDERED_BLOGS']('desc')
+
+			// Set a new state.latestBlog if the blog to be deleted
+			// is the current state.latestBlog
+			if (blogId === allBlogsInOrder[0].id) {
+				commit('STORE_LATEST_BLOG', allBlogsInOrder[1])
+			}
+
 			commit('DELETE_BLOG', blogId)
 		},
 		
