@@ -8,9 +8,11 @@ export default new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'production',
 
   state: {
-		blogs: {}, // All blogs will be stored here
+		blogs: {}, // All blogs will be stored her
+		latestBlog: null,
 		allBlogsStored: false,
-		latestBlog: null
+		comments: {},
+		currentCommentsLoaded: false
 	},
 
 	getters: {
@@ -49,6 +51,34 @@ export default new Vuex.Store({
 
 		ALL_BLOGS_STORED: (state, payload) => {
 			Vue.set(state, 'allBlogsStored', payload)
+		},
+
+		STORE_COMMENTS: (state, { blogId, comments }) => {
+			Vue.set(state.comments, blogId, comments)
+		},
+
+		SAVE_COMMENT: (state, { blogId, comment }) => {
+			// Comments of blog will share the same id with the blog
+			
+			if (state.comments[blogId]) {
+				const commentsOfBlog = state.comments[blogId].commentList
+
+				Vue.set(
+					commentsOfBlog,
+					commentsOfBlog.length,
+					comment
+				)
+			} else {
+				Vue.set(
+					state.comments,
+					blogId,
+					{ commentList: [comment] }
+				)
+			}
+		},
+
+		DELETE_COMMENT: (state, { blogId, commentIndex }) => {
+			Vue.delete(state.comments[blogId].commentList, commentIndex)
 		}
 	},
 	
@@ -66,6 +96,10 @@ export default new Vuex.Store({
 			commit('STORE_LATEST_BLOG', blog)
 		},
 
+		STORE_COMMENTS: ({ commit }, { blogId, comments }) => {
+			commit('STORE_COMMENTS', { blogId, comments })
+		},
+
 		DELETE_BLOG: ({ commit, getters }, blogId) => {
 			const allBlogsInOrder = getters['GET_ORDERED_BLOGS']('desc')
 
@@ -81,5 +115,13 @@ export default new Vuex.Store({
 		ALL_BLOGS_STORED: ({ commit }, payload) => {
 			commit('ALL_BLOGS_STORED', payload)
 		},
+
+		SAVE_COMMENT: ({ commit }, { blogId, comment }) => {
+			commit('SAVE_COMMENT', { blogId, comment })
+		},
+
+		DELETE_COMMENT: ({ commit }, { blogId, commentIndex }) => {
+			commit('DELETE_COMMENT', { blogId, commentIndex })
+		}
 	}
 })

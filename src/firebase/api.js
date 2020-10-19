@@ -1,7 +1,12 @@
+//const firebase = require('firebase/app');
+//require('firebase/firestore');
+
+import firebase from 'firebase/app'
 import db from '@/firebase/init'
 import store from '@/store'
 
 const blogsRef = db.collection('blogs')
+const commentsRef = db.collection('comments')
 
 const getBlog = blogId => {
 	// Get single blog from firebase if it isn't stored yet
@@ -88,14 +93,69 @@ const editBlog = (blog, blogId) => {
 		})
 }
 
-const deleteBlog = (blogId) => {
-//const deleteBlog = blogId => {
+const deleteBlog = blogId => {
 	blogsRef.doc(blogId).delete()
 		.then(() => {
-			console.log('kun hommat hoidettu');
-			// käytä tässä storen actionia deleteBlog()
 			store.dispatch('DELETE_BLOG', blogId)
+			// Also delete all comments of the deleted blog
+			commentsRef.doc(blogId).delete()
+				.catch(error => {
+					// This can be catched in try / catch
+					throw new Error(error)
+				})
 		})
+		.catch(error => {
+			// This can be catched in try / catch
+			throw new Error(error)
+		})
+}
+
+const getComments = blogId => {
+	commentsRef.doc(blogId).get()
+		.then(doc => {
+			const comments = doc.data()
+
+			store.dispatch('STORE_COMMENTS', { blogId, comments })
+		})
+		.catch(error => {
+			// This can be catched in try / catch
+			throw new Error(error)
+		})
+}
+
+const saveComment = (blogId, comment) => {
+	const commentsOfBlog = commentsRef.doc(blogId)
+
+	// If the blog has no comments yet
+	if (!store.state.comments[blogId]) {
+		commentsOfBlog.set({ commentList: [comment] })
+			.then(() => store.dispatch('SAVE_COMMENT', { blogId, comment }))
+			.catch(error => {
+				// This can be catched in try / catch
+				throw new Error(error)
+			})
+	} else { // If blog already has comments
+		commentsOfBlog.update({
+			commentList: firebase.firestore.FieldValue.arrayUnion(comment)
+		})
+			.then(() => store.dispatch('SAVE_COMMENT', { blogId, comment }))
+			.catch(error => {
+				// This can be catched in try / catch
+				throw new Error(error)
+			})
+	}
+}
+
+const deleteComment = (blogId, commentIndex) => {
+	const initialComments = store.state.comments[blogId].commentList
+	const updatedCommentList = initialComments.filter((comment, index) => {
+		return index !== commentIndex
+	})
+
+	commentsRef.doc(blogId).update({
+		commentList: updatedCommentList
+	})
+		.then(() => store.dispatch('DELETE_COMMENT', { blogId, commentIndex }))
 		.catch(error => {
 			// This can be catched in try / catch
 			throw new Error(error)
@@ -108,5 +168,8 @@ export {
 	getLatestBlog,
 	saveBlog,
 	editBlog,
-	deleteBlog
+	deleteBlog,
+	getComments,
+	saveComment,
+	deleteComment
 }

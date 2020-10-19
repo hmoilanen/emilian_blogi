@@ -10,7 +10,7 @@
 			v-else
 			:blog="blog"
 			@delete-canceled="deleting = false"
-		></Delete-blog>
+		/>
 	</div>
 </template>
 

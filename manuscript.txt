@@ -49,10 +49,13 @@ VAIHE 3:
 --OK	-blogin päivittäminen vaikuttaa sekä storeen että firebaseen
 
 VAIHE 4:
--lisää prototype: $api
--rakenna blogin kommentointi (tallenna kommentit omaan collectioniinsa)
--hae blogin kommentit (vasta) kun se aktivoidaan
+--OK -rakenna blogin kommentointi (tallenna kommentit omaan collectioniinsa)
+--OK -hae blogin kommentit (vasta) kun se aktivoidaan
+--OK -rakenna kommentin poistaminen
+--OK -kun blogi poistetaan, poista myös sen kaikki kommentit
 
+VAIHE 5:
 
 MUUT:
+-lisää prototype: $api
 -blogin etsiminen / find

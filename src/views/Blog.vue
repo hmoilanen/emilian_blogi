@@ -1,6 +1,7 @@
 <template>
 	<div class="blog">
 		<button @click="toBlogs">to blogs</button>
+		
 		<template v-if="blog">
 			<div>{{ blog.title }}</div>
 			<div>{{ blog.text }}</div>
@@ -14,7 +15,10 @@
 				:blog="blog"
 				@blog-edited="editMode = false"
 			></Edit-blog>
+			<Blog-commenting/>
+			<Blog-comments :blogId="blogId"></Blog-comments>
 		</template>
+
 		<div v-else>LOADING...</div>
 	</div>
 </template>
@@ -22,11 +26,17 @@
 <script>
 import { getBlog } from '@/firebase/api'
 import EditBlog from '@/components/EditBlog'
+import BlogCommenting from '@/components/BlogCommenting'
+import BlogComments from '@/components/BlogComments'
 
 export default {
 	name: 'Blog',
 
-	components: { EditBlog },
+	components: {
+		EditBlog,
+		BlogCommenting,
+		BlogComments
+	},
 
 	data() {
 		return { editMode: false }
