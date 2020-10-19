@@ -1,6 +1,6 @@
 <template>
-	<div class="blog-commenting">
-		<h3>Comment here</h3>
+	<div class="blog-commenting card">
+		<h3>Kommentoi</h3>
 		<input
 			v-model="alias"
 			type="text"
@@ -60,7 +60,11 @@ export default {
 
 <style lang="scss" scoped>
 .blog-commenting {
-	border: 2px solid blue;
-	padding: 2rem;
+	margin-bottom: 1rem;
+
+	input {
+		display: block;
+		margin-bottom: 1rem;
+	}
 }
 </style>

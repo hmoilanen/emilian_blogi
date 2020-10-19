@@ -1,37 +1,21 @@
 <template>
-	<div class="blogs-blog">
-		<h2>{{ blog.title }}</h2>
+	<div class="blogs-blog card">
+		<h2
+			class="blog-title"
+			@click="goToBlog"
+		>{{ blog.title }}</h2>
 		<p>{{ blog.text }}</p>
-
-		<button @click="goToBlog">open</button>
-
-		<button v-if="!deleting" @click="deleting = true">delete</button>
-		<Delete-blog
-			v-else
-			:blog="blog"
-			@delete-canceled="deleting = false"
-		/>
 	</div>
 </template>
 
 <script>
-import DeleteBlog from '@/components/DeleteBlog'
-
 export default {
 	name: 'BlogsBlog',
-
-	components: { DeleteBlog },
 
 	props: {
 		blog: {
 			type: Object,
 			required: true
-		}
-	},
-
-	data() {
-		return {
-			deleting: false
 		}
 	},
 
@@ -43,9 +27,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .blogs-blog {
-	border: 2px solid red;
-	padding: 1rem;
+	margin-bottom: 1rem;
+
+	.blog-title {
+		cursor: pointer;
+	}
 }
 </style>

@@ -1,26 +1,22 @@
 <template>
-  <div class="view--home">
-		this is front page
-		<router-link to="/blogs">to blogs</router-link>
-		<Add-Blog/>
-		<br>
+  <div class="view--home" :style="styling">
+		<div class="content-wrapper">
 
-		<!-- Latest blog -->
-		TEEE TÄSTÄ
-		<template v-if="latestBlog">
-			<div>
-				<h2>{{ latestBlog.title }}</h2>
-				<p>{{ latestBlog.text }}</p>
-			</div>
-		</template>
-		<div v-else>LOADING...</div>
+			<Add-Blog v-if="isLogged"/>
+			<template v-if="latestBlog">
+				<div>
+					<h2 @click="goToBlog">{{ latestBlog.title }}</h2>
+					<p>{{ latestBlog.text }}</p>
+				</div>
+			</template>
+			<div v-else>LOADING...</div>
+
+		</div>
   </div>
 </template>
 
 <script>
-//import db from '@/firebase/init'
 import { getLatestBlog } from '@/firebase/api'
-
 import AddBlog from '@/components/AddBlog'
 
 export default {
@@ -38,49 +34,36 @@ export default {
 		if (!this.$store.state.latestBlog) {
 			getLatestBlog()
 		}
-		//this.getLatestBlog()
-
-		const opj2 = {
-			a: 7,
-			b: () => {
-				console.log(this.a)
-			}
-		}
 	},
 
 	computed: {
+		isLogged() {
+			return this.$store.state.isLogged
+		},
+
 		latestBlog() {
 			const latestBlog = this.$store.state.latestBlog
 
 			return latestBlog
 				?	latestBlog
 				: null
+		},
+
+		styling() {
+			return {
+				paddingTop: `${this.$store.state.ui.navTopHeight}px` || '60px'
+			}
+		}
+	},
+
+	methods: {
+		goToBlog() {
+			this.$router.push({ name: 'Blog', params: { id: this.latestBlog.id } })
 		}
 	}
-
-	/* methods: {
-		getLatestBlog() {
-			const blogsRef = db.collection('blogs')
-			let newestBlogId
-
-			blogsRef.doc('main').get()
-				.then(doc => {
-					if (doc.exists) {
-						//console.log('Document data:', doc.data().newestBlog)
-						const newestBlogId = doc.data().newestBlog
-
-						blogsRef.doc(newestBlogId).get()
-							.then(blog => {
-								console.log('Newest blog successfully fetched!')
-								this.newestBlog = { ...blog.data(), id: blog.id }
-							})
-							.catch(error => console.log('Error getting newest blog:', error))
-					} else {
-						console.log('No such document!')
-					}
-				})
-				.catch(error => console.log('Error getting document:', error))
-		}
-	} */
 }
 </script>
+
+<style lang="scss" scoped>
+.view--home {}
+</style>

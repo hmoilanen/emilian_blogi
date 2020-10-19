@@ -1,31 +1,45 @@
 <template>
-	<div class="blog">
-		<button @click="toBlogs">to blogs</button>
-		
-		<template v-if="blog">
-			<div>{{ blog.title }}</div>
-			<div>{{ blog.text }}</div>
-			<hr>
-			<button
-				v-if="!editMode"
-				@click="editMode = true"
-			>edit blog</button>
-			<Edit-blog	
-				v-if="editMode"
-				:blog="blog"
-				@blog-edited="editMode = false"
-			></Edit-blog>
-			<Blog-commenting/>
-			<Blog-comments :blogId="blogId"></Blog-comments>
-		</template>
+	<div class="blog" :style="styling">
+		<div class="content-wrapper">
 
-		<div v-else>LOADING...</div>
+			<template v-if="blog">
+				<template v-if="!editing">
+					<h2>{{ blog.title }}</h2>
+					<div>{{ blog.text }}</div>
+				</template>
+
+				<div
+					v-if="modes.default"
+					class="options"
+				>
+					<button @click="editing = true">editoi</button>
+					<button @click="deleting = true">poista</button>
+				</div>
+
+				<Edit-blog	
+					v-if="modes.editing"
+					:blog="blog"
+					@blog-edited="editing = false"
+					@edit-canceled="editing = false"
+				/>
+				<Delete-blog
+					v-if="modes.deleting"
+					:blog="blog"
+					@delete-canceled="deleting = false"
+				/>
+				<Blog-commenting/>
+				<Blog-comments :blogId="blogId"/>
+			</template>
+			<div v-else>LOADING...</div>
+
+		</div>
 	</div>
 </template>
 
 <script>
 import { getBlog } from '@/firebase/api'
 import EditBlog from '@/components/EditBlog'
+import DeleteBlog from '@/components/DeleteBlog'
 import BlogCommenting from '@/components/BlogCommenting'
 import BlogComments from '@/components/BlogComments'
 
@@ -34,12 +48,16 @@ export default {
 
 	components: {
 		EditBlog,
+		DeleteBlog,
 		BlogCommenting,
 		BlogComments
 	},
 
 	data() {
-		return { editMode: false }
+		return {
+			editing: false,
+			deleting: false
+		}
 	},
 
 	created() {		
@@ -47,6 +65,16 @@ export default {
 	},
 
 	computed: {
+		modes() {
+			const isLogged = this.$store.state.isLogged
+
+			return {
+				default: isLogged && !this.editing && !this.deleting,
+				editing: isLogged && this.editing && !this.deleting,
+				deleting: isLogged && !this.editing && this.deleting
+			}
+		},
+
 		blogId() {
 			return this.$route.params.id
 		},
@@ -57,17 +85,23 @@ export default {
 			if (blogs && blogs[this.blogId]) {
 				return blogs[this.blogId]
 			} else return null
-		}
-	},
+		},
 
-	methods: {
-		toBlogs() {
-			this.$router.push({ name: 'Blogs' })
+		styling() {
+			return {
+				paddingTop: `${this.$store.state.ui.navTopHeight}px` || '60px'
+			}
 		}
 	}
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.blog {
+	padding-top: 60px; // dummy
 
+	.options {
+		margin: 1rem 0;
+	}
+}
 </style>

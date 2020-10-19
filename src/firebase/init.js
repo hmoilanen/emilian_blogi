@@ -1,5 +1,7 @@
 import firebase from 'firebase/app'
-import firestore from 'firebase/firestore'
+import 'firebase/auth'
+import 'firebase/firestore'
+import store from '@/store'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCKv-BaGXz0mxN5ZKuSFBOfE0tFu_k1Euo",
@@ -13,6 +15,14 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const firebaseApp =  firebase.initializeApp(firebaseConfig);
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+// Observe auth state
+const auth = firebase.auth().onAuthStateChanged(user => {
+	const newState = user ? true : false
+
+	// Update new auth state in store
+	store.dispatch('CHANGE_LOGIN_STATE', newState)
+})
 
 export default firebaseApp.firestore()

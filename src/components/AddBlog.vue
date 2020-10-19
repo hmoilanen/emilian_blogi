@@ -1,18 +1,20 @@
 <template>
-	<div class="add-blog">
-		<h3>Create a new blog</h3>
+	<div class="add-blog card">
+		<h2>LISÄÄ UUSI BLOGI</h2>
 		<form @submit.prevent="saveBlog">
 			<input
+				v-model="title"
 				type="text"
 				name="title"
-				v-model="title"
+				placeholder="otsikko"
 			>
 			<input
+				v-model="text"
 				type="text"
 				name="text"
-				v-model="text"
+				placeholder="tekstisisältö"
 			>
-			<button type="submit">create</button>
+			<button type="submit">luo blogi</button>
 		</form>
 	</div>
 </template>
@@ -52,7 +54,11 @@ export default {
 
 <style lang="scss" scoped>
 .add-blog {
-	border: 2px solid black;
-	padding: 1rem;
+	margin-bottom: 2rem;
+
+	input {
+		display: block;
+		margin: 1rem 0;
+	}
 }
 </style>

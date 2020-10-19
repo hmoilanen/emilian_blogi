@@ -2,6 +2,7 @@
 //require('firebase/firestore');
 
 import firebase from 'firebase/app'
+import 'firebase/auth'
 import db from '@/firebase/init'
 import store from '@/store'
 
@@ -86,6 +87,11 @@ const editBlog = (blog, blogId) => {
 		.then(() => {
 			const blogForStore = { ...blog, id: blogId }
 			store.dispatch('STORE_BLOGS', [blogForStore])
+
+			// Also update the latest blog in necessary
+			if (blogId === store.state.latestBlog.id) {
+				store.dispatch('STORE_LATEST_BLOG', blogForStore)
+			}
 		})
 		.catch(error => {
 			// This can be catched in try / catch
@@ -162,6 +168,22 @@ const deleteComment = (blogId, commentIndex) => {
 		})
 }
 
+const login = (email, password) => {
+	firebase.auth().signInWithEmailAndPassword(email, password)
+		.catch(error => {
+			// This can be catched in try / catch
+			throw new Error(error)
+		})
+}
+
+const logout = () => {
+	firebase.auth().signOut()
+		.catch(error => {
+			// This can be catched in try / catch
+			throw new Error(error)
+		})
+}
+
 export {
 	getBlog,
 	getAllBlogs,
@@ -171,5 +193,7 @@ export {
 	deleteBlog,
 	getComments,
 	saveComment,
-	deleteComment
+	deleteComment,
+	login,
+	logout
 }

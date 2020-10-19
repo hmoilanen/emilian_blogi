@@ -1,15 +1,18 @@
 <template>
 	<div class="blog-comments">
-		<h3>comments:</h3>
+		<h2>{{ allComments.length }} kommenttia:</h2>
 		<template v-if="allComments">
 			<div
-				class="comment"
+				class="comment card"
 				v-for="(comment, index) in allComments"
 				:key="index"
 			>
 				<strong>{{ comment.alias }}:</strong>
 				{{ comment.text }}
-				<button @click="deleteComment(index, comment)">delete</button>
+				<button
+					v-if="isLogged"
+					@click="deleteComment(index, comment)"
+				>delete</button>
 			</div>
 		</template>
 		<div v-else>LOADING COMMENTS...</div>
@@ -30,6 +33,10 @@ export default {
 	},
 
 	computed: {
+		isLogged() {
+			return this.$store.state.isLogged
+		},
+
 		allComments() {
 			const allComments = this.$store.state.comments[this.blogId]
 			
@@ -51,10 +58,10 @@ export default {
 
 <style lang="scss" scoped>
 .blog-comments {
-	border: 2px solid orange;
-	padding: 1rem;
+
 	.comment {
-		border: 2px solid yellow;
+		margin-bottom: 0.4rem;
+		border: 1px solid yellow;
 		padding: 1rem;
 	}
 }

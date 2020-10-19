@@ -1,7 +1,6 @@
 <template>
-	<div>
-		<h3>EDITOINTI!</h3>
-		<div>{{ blog }}</div>
+	<div class="edit-blog">
+		<h4>EDITOI:</h4>
 		<input
 			v-model="title"
 			type="text"
@@ -11,14 +10,10 @@
 			v-model="text"
 			name="text"
 			cols="30"
-			rows="5"
+			rows="10"
 		></textarea>
-		<!-- <input
-			type="text"
-			name="title"
-			v-model="title"
-		> -->
-		<button @click="saveEditedBlog">save</button>
+		<button @click="saveEditedBlog">tallenna</button>
+		<button @click="cancelEdit">palaa</button>
 	</div>
 </template>
 
@@ -59,11 +54,23 @@ export default {
 			} catch (error) {
 				console.error('Error editing blog:', error)
 			}
+		},
+
+		cancelEdit() {
+			this.$emit('edit-canceled')
 		}
 	}
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.edit-blog {
+	input, textarea {
+		display: block;
+	}
 
+	textarea {
+		width: 100%;
+	}
+}
 </style>

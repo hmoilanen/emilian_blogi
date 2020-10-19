@@ -8,11 +8,15 @@ export default new Vuex.Store({
 	strict: process.env.NODE_ENV !== 'production',
 
   state: {
+		isLogged: false,
 		blogs: {}, // All blogs will be stored her
 		latestBlog: null,
 		allBlogsStored: false,
 		comments: {},
-		currentCommentsLoaded: false
+		currentCommentsLoaded: false,
+		ui: {
+			navTopHeight: 60 // = px
+		}
 	},
 
 	getters: {
@@ -28,6 +32,10 @@ export default new Vuex.Store({
 	},
 	
   mutations: {
+		CHANGE_LOGIN_STATE: (state, newState) => {
+			state.isLogged = newState
+		},
+
 		STORE_BLOGS: (state, blogs) => {
 			// Store blogs as a hash map
 			// Note: pass blogs always as an array!
@@ -83,6 +91,10 @@ export default new Vuex.Store({
 	},
 	
   actions: {
+		CHANGE_LOGIN_STATE: ({ commit }, newState) => {
+			commit('CHANGE_LOGIN_STATE', newState)
+		},
+
 		STORE_BLOGS: ({ commit }, blogs) => {
 			// Note: pass blogs always as an array!
 			if (Array.isArray(blogs)) {

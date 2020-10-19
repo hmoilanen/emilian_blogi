@@ -1,18 +1,17 @@
 <template>
-  <div class="view--blogs">
-		this is page for all blogs
-		<router-link to="/">to front page</router-link>
-		<br>
+  <div class="view--blogs" :style="styling">
+		<div class="content-wrapper">
 
-		<!-- Blogs -->
-		<template v-if="allBlogs">
-			<Blogs-blog
-				v-for="blog in allBlogs"
-				:key="blog.id"
-				:blog="blog"
-			/>
-		</template>
-		<div v-else>LOADING...</div>
+			<template v-if="allBlogs">
+				<Blogs-blog
+					v-for="blog in allBlogs"
+					:key="blog.id"
+					:blog="blog"
+				/>
+			</template>
+			<div v-else>LOADING...</div>
+			
+		</div>
   </div>
 </template>
 
@@ -38,6 +37,12 @@ export default {
 			if (blogs && Object.keys(blogs).length > 0) {
 				return this.$store.getters['GET_ORDERED_BLOGS']()
 			} else return null
+		},
+
+		styling() {
+			return {
+				paddingTop: `${this.$store.state.ui.navTopHeight}px` || '60px'
+			}
 		}
 	}
 }
