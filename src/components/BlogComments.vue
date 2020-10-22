@@ -1,7 +1,7 @@
 <template>
 	<div class="blog-comments">
-		<h2>{{ allComments.length }} kommenttia:</h2>
 		<template v-if="allComments">
+			<h2>{{ allComments.length }} kommenttia:</h2>
 			<div
 				class="comment card"
 				v-for="(comment, index) in allComments"
@@ -40,7 +40,7 @@ export default {
 		allComments() {
 			const allComments = this.$store.state.comments[this.blogId]
 			
-			return allComments ? allComments.commentList : null
+			return allComments ? allComments.commentList : []
 		}
 	},
 

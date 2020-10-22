@@ -6,7 +6,8 @@
 			<template v-if="latestBlog">
 				<div>
 					<h2 @click="goToBlog">{{ latestBlog.title }}</h2>
-					<p>{{ latestBlog.text }}</p>
+					<div>{{ latestBlog.text }}</div>
+					<div>lisätty: {{ parseCreated(latestBlog.created) }}</div>
 				</div>
 			</template>
 			<div v-else>LOADING...</div>
@@ -17,6 +18,7 @@
 
 <script>
 import { getLatestBlog } from '@/firebase/api'
+import { timestampToDate } from '@/utils/parse'
 import AddBlog from '@/components/AddBlog'
 
 export default {
@@ -59,6 +61,10 @@ export default {
 	methods: {
 		goToBlog() {
 			this.$router.push({ name: 'Blog', params: { id: this.latestBlog.id } })
+		},
+
+		parseCreated(timestamp) {
+			return timestampToDate(timestamp)
 		}
 	}
 }

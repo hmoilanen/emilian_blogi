@@ -6,6 +6,8 @@
 				<template v-if="!editing">
 					<h2>{{ blog.title }}</h2>
 					<div>{{ blog.text }}</div>
+					<br>
+					<div>lisätty: {{ parseCreated(blog.created) }}</div>
 				</template>
 
 				<div
@@ -38,6 +40,7 @@
 
 <script>
 import { getBlog } from '@/firebase/api'
+import { timestampToDate } from '@/utils/parse'
 import EditBlog from '@/components/EditBlog'
 import DeleteBlog from '@/components/DeleteBlog'
 import BlogCommenting from '@/components/BlogCommenting'
@@ -91,6 +94,12 @@ export default {
 			return {
 				paddingTop: `${this.$store.state.ui.navTopHeight}px` || '60px'
 			}
+		}
+	},
+
+	methods: {
+		parseCreated(timestamp) {
+			return timestampToDate(timestamp)
 		}
 	}
 }

@@ -4,11 +4,14 @@
 			class="blog-title"
 			@click="goToBlog"
 		>{{ blog.title }}</h2>
-		<p>{{ blog.text }}</p>
+		<div>{{ blog.text }}</div>
+		<div>lisätty: {{ parseCreated(blog.created) }}</div>
 	</div>
 </template>
 
 <script>
+import { timestampToDate } from '@/utils/parse'
+
 export default {
 	name: 'BlogsBlog',
 
@@ -22,6 +25,10 @@ export default {
 	methods: {	
 		goToBlog() {
 			this.$router.push({ name: 'Blog', params: { id: this.blog.id } })
+		},
+
+		parseCreated(timestamp) {
+			return timestampToDate(timestamp)
 		}
 	}
 }
